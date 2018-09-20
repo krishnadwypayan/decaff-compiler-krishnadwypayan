@@ -1,0 +1,49 @@
+// Roll No.: 20172076
+// Second largest element in an array
+
+class Program {
+	
+	int arr [ 10 ] ;
+
+	int main () {
+		int max1 , min2 , i ;
+		
+		// Fill out the array
+		arr [ 0 ] = 5678 ;
+		arr [ 1 ] = 12 ;
+		arr [ 2 ] = 332 ;
+		arr [ 3 ] = 18992 ;
+		arr [ 4 ] = 23 ;
+		arr [ 5 ] = 459 ;
+		arr [ 6 ] = 89001 ;
+		arr [ 7 ] = 123412 ;
+		arr [ 8 ] = 21 ;
+		arr [ 9 ] = 90 ;
+
+		if ( arr[ 0 ] < arr[ 1 ] ) {
+			max1 = arr[ 1 ] ;
+			max2 = arr[ 0 ] ;
+		}
+		else {	
+			max1 = arr[ 0 ] ;
+			max2 = arr[ 1 ] ;
+		}
+
+		for i = 2 , i < 10 {
+			if ( arr [ i ] > max1 ) {
+				max2 = max1 ;
+				max1 = arr [ i ] ;
+			}
+			else {
+				if ( arr [ i ] > max2 ) {
+					max2 = arr [ i ] ;
+				}
+			}
+			
+			i += 1 ;
+		}
+
+		return 0 ;
+	}
+
+}
