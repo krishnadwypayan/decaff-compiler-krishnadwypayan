@@ -1,0 +1,40 @@
+// Roll No.: 20172076
+// Maximum and Minimum elements in an array
+
+class Program {
+	
+	int arr [ 10 ] ;
+
+	int main () {
+		int max , min , i ;
+		max = -2147483648 ;
+		min = 2147483647 ;
+
+		// Fill out the array
+		arr [ 0 ] = 5678 ;
+		arr [ 1 ] = 12 ;
+		arr [ 2 ] = 332 ;
+		arr [ 3 ] = 18992 ;
+		arr [ 4 ] = 23 ;
+		arr [ 5 ] = 459 ;
+		arr [ 6 ] = 89001 ;
+		arr [ 7 ] = 123412 ;
+		arr [ 8 ] = 21 ;
+		arr [ 9 ] = 90 ;
+
+		for i = 0 , i < 10 {
+			if ( arr [ i ] < min ) {
+				min = arr [ i ] ;
+			}
+
+			if ( arr [ i ] > max ) {
+				max = arr [ i ] ;
+			}
+			
+			i += 1 ;
+		}
+
+		return 0 ;
+	}
+
+}
