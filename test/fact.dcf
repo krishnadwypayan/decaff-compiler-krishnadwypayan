@@ -1,0 +1,26 @@
+// Roll No.: 20172076
+// Factorial of a number : fact.dcf
+
+class Program {
+
+	// This method will return the factorial of a number.
+	int factorial (int n) {
+		int res, i ;
+		res = 1 ;
+
+		for i = 1, i <= n {
+			res = res * i ;
+			i += 1 ;
+		}
+
+		return res ;
+	}
+	
+	// Execution of a Decaf program starts at method main.
+	int main() {
+		int ans ;
+		ans = factorial (10);
+		return 0;
+	}
+
+}
