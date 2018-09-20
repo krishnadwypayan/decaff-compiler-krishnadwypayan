@@ -1,0 +1,16 @@
+// Roll No.: 20172076
+// Sum of first n natural numbers
+
+class Program {
+
+	int main () {
+		
+		int n , sum ;
+		n = 10 ;
+		
+		sum = ( n * ( n + 1 ) ) / 2 ;
+
+		return 0 ;
+	}
+
+}
