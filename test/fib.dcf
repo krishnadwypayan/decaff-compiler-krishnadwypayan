@@ -3,7 +3,7 @@
 
 class Program {
 
-	int main() {
+	int main () {
 		int a , b , i , arr [ 10 ] ;
 		a = 0 , b = 1 ;
 
