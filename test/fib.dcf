@@ -3,8 +3,10 @@
 
 class Program {
 
+	int arr [ 10 ] ;
+
 	int main () {
-		int a , b , i , arr [ 10 ] ;
+		int a , b , i ;
 		a = 0 , b = 1 ;
 
 		arr [ 0 ] = 0 ;
