@@ -37,7 +37,7 @@ class Program {
 	void quickSort ( int low , int high ) {
 		if ( low < high ) {
 			int pivot ;
-			pivot = partition ( low, high ) ;
+			pivot = partition ( low , high ) ;
 
 			quickSort ( low , pivot - 1 );
 			quickSort ( pivot + 1 , high );
@@ -59,19 +59,7 @@ class Program {
 		arr [ 8 ] = 21 ;
 		arr [ 9 ] = 90 ;
 
-		for i = 0 , i < n - 1 {
-			for j = 0 , j < n - i - 1 {
-				if ( arr [ j ] > arr [ j + 1 ] ) {
-					// swap
-					int temp ;
-					temp = arr [ j ] ;
-					arr [ j ] = arr [ j + 1 ] ;
-					arr [ j + 1 ] = temp ;
-				}
-				j += 1 ;
-			}
-			i += 1 ;
-		}
+		quicSort ( 0 , 9 ) ;
 
 		return 0 ;
 	}
