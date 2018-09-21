@@ -12,7 +12,7 @@ class Program {
 	    
 	    i = ( low - 1 ) ;  // Index of smaller element 
 	  
-	    for j = low , j <= high - 1 { 
+	    for j = low , high - 1 { 
 	        // If current element is smaller than or equal to pivot 
 	        if ( arr [ j ] <= pivot ) { 
 	            i += 1 ;

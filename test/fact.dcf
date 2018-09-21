@@ -8,7 +8,7 @@ class Program {
 		int res , i ;
 		res = 1 ;
 
-		for i = 1 , i <= n {
+		for i = 1 , n {
 			res = res * i ;
 			i += 1 ;
 		}
