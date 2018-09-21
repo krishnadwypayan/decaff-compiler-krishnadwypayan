@@ -59,7 +59,7 @@ class Program {
 		arr [ 8 ] = 21 ;
 		arr [ 9 ] = 90 ;
 
-		quicSort ( 0 , 9 ) ;
+		quickSort ( 0 , 9 ) ;
 
 		return 0 ;
 	}
