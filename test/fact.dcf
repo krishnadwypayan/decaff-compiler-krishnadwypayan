@@ -18,8 +18,10 @@ class Program {
 	
 	// Execution of a Decaf program starts at method main.
 	int main () {
-		int ans ;
-		ans = factorial (10) ;
+		int n , ans ;
+		n = 10 ;
+		ans = factorial ( n ) ;
+		callout ( "printf" , "Factorial of %d is %d" , n , ans ) ;
 		return 0 ;
 	}
 

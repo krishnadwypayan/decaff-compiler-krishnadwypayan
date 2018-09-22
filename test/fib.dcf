@@ -12,8 +12,12 @@ class Program {
 		arr [ 0 ] = 0 ;
 		arr [ 1 ] = 1 ; 
 
+		callout ( "printf" , "%d\t" , arr [ 0 ] ) ;
+		callout ( "printf" , "%d\t" , arr [ 1 ] ) ;
+
 		for i = 2 , 9 {
 			arr [ i ] = arr [ i - 1 ] + arr [ i - 2 ] ;
+			callout ( "printf" , "%d\t" , arr [ i ] ) ;
 			i += 1 ;
 		}
 

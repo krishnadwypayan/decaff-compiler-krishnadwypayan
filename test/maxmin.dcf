@@ -34,6 +34,9 @@ class Program {
 			i += 1 ;
 		}
 
+		callout ( "printf" , "Max element : %d\n" , max ) ;
+		callout ( "printf" , "Min element : %d" , min ) ;
+
 		return 0 ;
 	}
 

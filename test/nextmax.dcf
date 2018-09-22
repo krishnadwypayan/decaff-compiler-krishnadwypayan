@@ -43,6 +43,8 @@ class Program {
 			i += 1 ;
 		}
 
+		callout ( "printf" , "Second largest eleement is %d" , max2 ) ;
+
 		return 0 ;
 	}
 

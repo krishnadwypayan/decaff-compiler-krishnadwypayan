@@ -35,6 +35,11 @@ class Program {
 			i += 1 ;
 		}
 
+		for i = 0 , 9 {
+			callout ( "printf" , "%d\t" , arr [ i ] ) ;
+			i += 1 ;
+		}
+
 		return 0 ;
 	}
 

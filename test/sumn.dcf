@@ -9,6 +9,7 @@ class Program {
 		n = 10 ;
 		
 		sum = ( n * ( n + 1 ) ) / 2 ;
+		callout ( "printf" , "Sum of the first %d numbers is %d" , n , sum ) ;
 
 		return 0 ;
 	}
