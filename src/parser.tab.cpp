@@ -1808,8 +1808,8 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-void yyerror(const char *s){
+void yyerror(const char *s) {
 	errors++;
-	printf("Error:%s at %d\n",s,line_num);
-  exit(-1);
+	printf("Error:%s at %d\n", s, line_num);
+  	exit(-1);
 }

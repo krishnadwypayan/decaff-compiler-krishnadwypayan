@@ -1,16 +1,18 @@
 %{
-	int lineNum = 1;
+	#include "parser.tab.hpp"
+	#define YY_DECL extern "C" int yylex()
+	int line_num = 1;
 %}
 
 digit [0-9]
 alpha [a-zA-Z_]
 alpha_num {alpha}|{digit}
 hex_digit {digit}|[a-fA-F]
-char [ -~]			/* Matches all ascii from space to tilde */
+char [ -~]			
 char_literal \'{char}\'
 string_literal \"{char}*\"
 decimal_literal {digit}{digit}*
-hex_literal 0x{hex_digit}{hex_digit}*
+hex_literal "0x"{hex_digit}{hex_digit}*
 int_literal {decimal_literal}|{hex_literal}
 
 %%
@@ -57,11 +59,9 @@ int_literal {decimal_literal}|{hex_literal}
 {alpha}{alpha_num}*		{ return ID; }
 {char_literal} 			{ return CHAR_LITERAL; }
 {string_literal} 		{ return STRING_LITERAL; }
-{decimal_literal} 		{ return DECIMAL_LITERAL; }
-{hex_literal} 			{ return DECIMAL_LITERAL; }
 {int_literal} 			{ return INT_LITERAL; }
 
-\n 	{ lineNum++; }
+\n 	{ line_num++; }
 
 "//".* 		/* ignore comments */
 [ \t]+		/* ignore delimiters */
