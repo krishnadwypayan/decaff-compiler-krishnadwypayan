@@ -4,10 +4,10 @@
 class Program {
 	
 	int n , arr [ 10 ] ;
-	n = 10 ;
 
 	int main () {
 		int i , j ;
+		n = 10 ;
 		
 		// Fill out the array
 		arr [ 0 ] = 5678 ;

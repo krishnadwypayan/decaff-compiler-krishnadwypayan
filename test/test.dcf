@@ -1,0 +1,12 @@
+// Roll No.: 20172076
+// Sum of first n natural numbers
+
+class Program {
+
+	int main () {
+		int x ;
+		x = 10 ;
+		return ;
+	}
+
+}

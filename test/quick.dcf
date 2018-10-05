@@ -3,11 +3,10 @@
 
 class Program {
 	
-	int n , arr [ 10 ] ;
-	n = 10 ;
+	int arr [ 10 ] ;
 
 	int partition ( int low , int high ) {
-		int pivot , i , j ;
+		int pivot , i , j , temp;
 		pivot = arr [ high ] ;
 	    
 	    i = ( low - 1 ) ;  // Index of smaller element 
@@ -17,7 +16,6 @@ class Program {
 	        if ( arr [ j ] <= pivot ) { 
 	            i += 1 ;
 	            
-	            int temp ;
 	            temp = arr [ i ] ;
 	            arr [ i ] = arr [ j ] ;
 	            arr [ j ] = temp ;
@@ -26,7 +24,6 @@ class Program {
 	        j += 1 ;
 	    } 
 
-	    int temp ;
         temp = arr [ i + 1 ] ;
         arr [ i + 1 ] = arr [ high ] ;
         arr [ high ] = temp ;
