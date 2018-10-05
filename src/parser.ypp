@@ -59,13 +59,14 @@ field_declaration:
 	;
 
 vars:
-	var
-	| vars COMMA var
+	ID var
+	| ID OSB INT_LITERAL CSB var
 	;
 
 var:
-	ID
-	| ID OSB INT_LITERAL CSB
+	/* epsilon */
+	| COMMA ID var
+	| COMMA ID OSB INT_LITERAL CSB var
 	;
 
 method_declarations:
@@ -74,8 +75,8 @@ method_declarations:
 	;
 
 method_declaration:
-	TYPE ID OP method_args CP block
-	| VOID ID OP method_args CP block
+	TYPE ID method_args block
+	| VOID ID method_args block
 	;
 
 method_args:
@@ -93,11 +94,12 @@ block:
 	;
 
 var_declarations:
-	TYPE ID more_var_decl
+	/* epsilon */
+	| TYPE ID more_var_decl
 	;
 
 more_var_decl:
-	/* epsilon */
+	SEMI_COLON
 	| COMMA ID more_var_decl
 	;
 
@@ -145,7 +147,8 @@ callout_args:
 	;
 
 callout_arg:
-	expr
+	/* epsilon */
+	| expr
 	| STRING_LITERAL
 	;
 
@@ -158,9 +161,9 @@ expr:
 	location
 	| method_call
 	| literal
-	| expr bin_op expr SEMI_COLON
-	| SUB expr SEMI_COLON
-	| NOT expr SEMI_COLON
+	| expr bin_op expr
+	| SUB expr
+	| NOT expr
 	| OP expr CP
 	;
 
@@ -222,10 +225,9 @@ int main(int argc, char **argv)
 	yydebug = 1;
 	do {
 		yyparse();
-		cout << l++ << endl;
 	} while (!feof(yyin));
 
-	cerr << "Parsed!";
+	cerr << "Parsed Successfully!";
 
 	return 0;
 }

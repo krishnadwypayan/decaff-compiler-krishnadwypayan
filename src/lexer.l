@@ -61,7 +61,7 @@ int_literal {decimal_literal}|{hex_literal}
 {string_literal} 		{ return STRING_LITERAL; }
 {int_literal} 			{ return INT_LITERAL; }
 
-\n 	{ line_num++; }
+\n 	{ line_num++; printf("\n\n**************** :: %d :: *****************\n", line_num);}
 
 "//".* 		/* ignore comments */
 [ \t]+		/* ignore delimiters */
