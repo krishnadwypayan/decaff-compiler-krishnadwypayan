@@ -1,6 +1,8 @@
 %{
+	#include "program.h"
 	#include "parser.tab.hpp"
 	#define YY_DECL extern "C" int yylex()
+	extern union Node yylval;
 	int line_num = 1;
 %}
 
@@ -28,7 +30,7 @@ int_literal {decimal_literal}|{hex_literal}
 "else"      		{ return ELSE; }
 "break"     		{ return BREAK; }
 "continue"  		{ return CONTINUE; }
-"true"|"false"		{ return BOOL_LITERAL; }
+"true"|"false"		{ yylval.value = strdup(yytext); return BOOL_LITERAL; }
 
 ";"         { return SEMI_COLON; }
 ","         { return COMMA; }
@@ -56,10 +58,10 @@ int_literal {decimal_literal}|{hex_literal}
 "&&"        { return COND_AND; }
 "||"        { return COND_OR; }
 
-{alpha}{alpha_num}*		{ return ID; }
-{char_literal} 			{ return CHAR_LITERAL; }
-{string_literal} 		{ return STRING_LITERAL; }
-{int_literal} 			{ return INT_LITERAL; }
+{alpha}{alpha_num}*		{ yylval.value = strdup(yytext); return ID; }
+{char_literal} 			{ yylval.value = strdup(yytext); return CHAR_LITERAL; }
+{string_literal} 		{ yylval.value = strdup(yytext); return STRING_LITERAL; }
+{int_literal} 			{ yylval.number = atoi(yytext); return INT_LITERAL; }
 
 \n 	{ line_num++; printf("\n\n**************** :: %d :: *****************\n", line_num);}
 

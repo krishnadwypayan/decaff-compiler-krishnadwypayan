@@ -1,5 +1,6 @@
 %{
 	#include <bits/stdc++.h>
+	#include "program.h"
 	#define YYDEBUG 1
 	using namespace std;
 	extern "C" int yylex();
@@ -7,8 +8,10 @@
 	extern FILE *yyin;
 	extern int line_num;
 	extern int errors;
+	extern union Node yylval;
 	int errors = 0;
 	void yyerror(const char *s);
+	class Program* start = NULL;
 %}
 
 %start program
@@ -26,8 +29,8 @@
 %token LT GT LE GE
 %token EQUAL_EQUAL NOT_EQUAL
 %token COND_AND COND_OR NOT
-%token ID
-%token CHAR_LITERAL STRING_LITERAL INT_LITERAL BOOL_LITERAL
+%token <value> ID CHAR_LITERAL STRING_LITERAL BOOL_LITERAL
+%token <number> INT_LITERAL
 
 /* ------------------- Precedence ------------------- */
 %left EQUAL NOT_EQUAL
@@ -37,11 +40,17 @@
 %left MUL DIV MOD
 %nonassoc NOT
 
+/* ----------------- Non-Terminals ------------------ */
+%type <program> program
+
 /* ----------------- Grammar Rules ------------------ */
 %%
 
 program:
-	CLASS ID OFB field_declarations method_declarations CFB
+	CLASS ID OFB field_declarations method_declarations CFB { 
+		$$ = new Program(string($2)); 
+		start = $$;
+		}
 	;
 
 field_declarations:
