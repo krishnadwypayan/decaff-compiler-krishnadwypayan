@@ -77,13 +77,13 @@ Grammar
    48 location: ID
    49         | ID OSB expr CSB
 
-   50 expr: location
-   51     | method_call
-   52     | literal
-   53     | expr bin_op expr
-   54     | SUB expr
-   55     | NOT expr
-   56     | OP expr CP
+   50 expr: OP expr CP
+   51     | location
+   52     | method_call
+   53     | literal
+   54     | expr bin_op expr
+   55     | SUB expr
+   56     | NOT expr
 
    57 bin_op: arith_op
    58       | rel_op
@@ -130,15 +130,15 @@ SEMI_COLON (268) 3 21 25 26 30 31 32 33
 COMMA (269) 8 9 17 22 29 42 44
 OSB (270) 6 9 49
 CSB (271) 6 9 49
-OP (272) 14 15 27 28 38 39 56
-CP (273) 14 15 27 28 38 39 56
+OP (272) 14 15 27 28 38 39 50
+CP (273) 14 15 27 28 38 39 50
 OFB (274) 1 18
 CFB (275) 1 18
 EQUAL (276) 29 35
 PLUS_EQUAL (277) 36
 MINUS_EQUAL (278) 37
 ADD (279) 61
-SUB (280) 54 62
+SUB (280) 55 62
 DIV (281) 64
 MUL (282) 63
 MOD (283) 65
@@ -150,7 +150,7 @@ EQUAL_EQUAL (288) 70
 NOT_EQUAL (289) 71
 COND_AND (290) 72
 COND_OR (291) 73
-NOT (292) 55
+NOT (292) 56
 ID (293) 1 5 6 8 9 12 13 15 17 20 22 29 40 48 49
 CHAR_LITERAL (294) 75
 STRING_LITERAL (295) 39 47
@@ -193,7 +193,7 @@ statement (57)
 assign_op (58)
     on left: 35 36 37, on right: 25
 method_call (59)
-    on left: 38 39, on right: 26 51
+    on left: 38 39, on right: 26 52
 method_name (60)
     on left: 40, on right: 38
 method_call_params (61)
@@ -203,12 +203,12 @@ callout_args (62)
 callout_arg (63)
     on left: 45 46 47, on right: 43 44
 location (64)
-    on left: 48 49, on right: 25 50
+    on left: 48 49, on right: 25 51
 expr (65)
     on left: 50 51 52 53 54 55 56, on right: 25 27 28 29 31 41 42 46
-    49 53 54 55 56
+    49 50 54 55 56
 bin_op (66)
-    on left: 57 58 59 60, on right: 53
+    on left: 57 58 59 60, on right: 54
 arith_op (67)
     on left: 61 62 63 64 65, on right: 57
 rel_op (68)
@@ -218,7 +218,7 @@ eq_op (69)
 cond_op (70)
     on left: 72 73, on right: 60
 literal (71)
-    on left: 74 75 76, on right: 52
+    on left: 74 75 76, on right: 53
 
 
 state 0
@@ -814,7 +814,7 @@ state 67
 
 state 68
 
-   56 expr: OP . expr CP
+   50 expr: OP . expr CP
 
     CALLOUT       shift, and go to state 50
     OP            shift, and go to state 68
@@ -834,7 +834,7 @@ state 68
 
 state 69
 
-   54 expr: SUB . expr
+   55 expr: SUB . expr
 
     CALLOUT       shift, and go to state 50
     OP            shift, and go to state 68
@@ -854,7 +854,7 @@ state 69
 
 state 70
 
-   55 expr: NOT . expr
+   56 expr: NOT . expr
 
     CALLOUT       shift, and go to state 50
     OP            shift, and go to state 68
@@ -895,22 +895,22 @@ state 73
 
 state 74
 
-   51 expr: method_call .
+   52 expr: method_call .
 
-    $default  reduce using rule 51 (expr)
+    $default  reduce using rule 52 (expr)
 
 
 state 75
 
-   50 expr: location .
+   51 expr: location .
 
-    $default  reduce using rule 50 (expr)
+    $default  reduce using rule 51 (expr)
 
 
 state 76
 
    31 statement: RETURN expr . SEMI_COLON
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     SEMI_COLON   shift, and go to state 96
     ADD          shift, and go to state 97
@@ -936,9 +936,9 @@ state 76
 
 state 77
 
-   52 expr: literal .
+   53 expr: literal .
 
-    $default  reduce using rule 52 (expr)
+    $default  reduce using rule 53 (expr)
 
 
 state 78
@@ -1120,8 +1120,8 @@ state 92
 
 state 93
 
-   53 expr: expr . bin_op expr
-   56     | OP expr . CP
+   50 expr: OP expr . CP
+   54     | expr . bin_op expr
 
     CP           shift, and go to state 125
     ADD          shift, and go to state 97
@@ -1147,16 +1147,16 @@ state 93
 
 state 94
 
-   53 expr: expr . bin_op expr
-   54     | SUB expr .
+   54 expr: expr . bin_op expr
+   55     | SUB expr .
 
     DIV          shift, and go to state 99
     MUL          shift, and go to state 100
     MOD          shift, and go to state 101
     EQUAL_EQUAL  shift, and go to state 106
 
-    EQUAL_EQUAL  [reduce using rule 54 (expr)]
-    $default     reduce using rule 54 (expr)
+    EQUAL_EQUAL  [reduce using rule 55 (expr)]
+    $default     reduce using rule 55 (expr)
 
     bin_op    go to state 110
     arith_op  go to state 111
@@ -1167,13 +1167,13 @@ state 94
 
 state 95
 
-   53 expr: expr . bin_op expr
-   55     | NOT expr .
+   54 expr: expr . bin_op expr
+   56     | NOT expr .
 
     EQUAL_EQUAL  shift, and go to state 106
 
-    EQUAL_EQUAL  [reduce using rule 55 (expr)]
-    $default     reduce using rule 55 (expr)
+    EQUAL_EQUAL  [reduce using rule 56 (expr)]
+    $default     reduce using rule 56 (expr)
 
     bin_op    go to state 110
     arith_op  go to state 111
@@ -1282,7 +1282,7 @@ state 109
 
 state 110
 
-   53 expr: expr bin_op . expr
+   54 expr: expr bin_op . expr
 
     CALLOUT       shift, and go to state 50
     OP            shift, and go to state 68
@@ -1352,7 +1352,7 @@ state 116
 
    27 statement: IF OP expr . CP block
    28          | IF OP expr . CP block ELSE block
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     CP           shift, and go to state 128
     ADD          shift, and go to state 97
@@ -1379,7 +1379,7 @@ state 116
 state 117
 
    49 location: ID OSB expr . CSB
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     CSB          shift, and go to state 129
     ADD          shift, and go to state 97
@@ -1415,7 +1415,7 @@ state 118
 state 119
 
    41 method_call_params: expr .
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     ADD          shift, and go to state 97
     SUB          shift, and go to state 98
@@ -1443,7 +1443,7 @@ state 119
 state 120
 
    25 statement: location assign_op expr . SEMI_COLON
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     SEMI_COLON   shift, and go to state 132
     ADD          shift, and go to state 97
@@ -1493,7 +1493,7 @@ state 123
 state 124
 
    46 callout_arg: expr .
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     ADD          shift, and go to state 97
     SUB          shift, and go to state 98
@@ -1520,15 +1520,15 @@ state 124
 
 state 125
 
-   56 expr: OP expr CP .
+   50 expr: OP expr CP .
 
-    $default  reduce using rule 56 (expr)
+    $default  reduce using rule 50 (expr)
 
 
 state 126
 
-   53 expr: expr . bin_op expr
-   53     | expr bin_op expr .
+   54 expr: expr . bin_op expr
+   54     | expr bin_op expr .
 
     ADD          shift, and go to state 97
     SUB          shift, and go to state 98
@@ -1544,20 +1544,20 @@ state 126
     COND_AND     shift, and go to state 108
     COND_OR      shift, and go to state 109
 
-    ADD          [reduce using rule 53 (expr)]
-    SUB          [reduce using rule 53 (expr)]
-    DIV          [reduce using rule 53 (expr)]
-    MUL          [reduce using rule 53 (expr)]
-    MOD          [reduce using rule 53 (expr)]
-    LT           [reduce using rule 53 (expr)]
-    GT           [reduce using rule 53 (expr)]
-    LE           [reduce using rule 53 (expr)]
-    GE           [reduce using rule 53 (expr)]
-    EQUAL_EQUAL  [reduce using rule 53 (expr)]
-    NOT_EQUAL    [reduce using rule 53 (expr)]
-    COND_AND     [reduce using rule 53 (expr)]
-    COND_OR      [reduce using rule 53 (expr)]
-    $default     reduce using rule 53 (expr)
+    ADD          [reduce using rule 54 (expr)]
+    SUB          [reduce using rule 54 (expr)]
+    DIV          [reduce using rule 54 (expr)]
+    MUL          [reduce using rule 54 (expr)]
+    MOD          [reduce using rule 54 (expr)]
+    LT           [reduce using rule 54 (expr)]
+    GT           [reduce using rule 54 (expr)]
+    LE           [reduce using rule 54 (expr)]
+    GE           [reduce using rule 54 (expr)]
+    EQUAL_EQUAL  [reduce using rule 54 (expr)]
+    NOT_EQUAL    [reduce using rule 54 (expr)]
+    COND_AND     [reduce using rule 54 (expr)]
+    COND_OR      [reduce using rule 54 (expr)]
+    $default     reduce using rule 54 (expr)
 
     bin_op    go to state 110
     arith_op  go to state 111
@@ -1569,7 +1569,7 @@ state 126
 state 127
 
    29 statement: FOR ID EQUAL expr . COMMA expr block
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     COMMA        shift, and go to state 135
     ADD          shift, and go to state 97
@@ -1708,7 +1708,7 @@ state 136
 state 137
 
    42 method_call_params: method_call_params COMMA expr .
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     ADD          shift, and go to state 97
     SUB          shift, and go to state 98
@@ -1743,7 +1743,7 @@ state 138
 state 139
 
    29 statement: FOR ID EQUAL expr COMMA expr . block
-   53 expr: expr . bin_op expr
+   54 expr: expr . bin_op expr
 
     OFB          shift, and go to state 28
     ADD          shift, and go to state 97

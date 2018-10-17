@@ -13,11 +13,6 @@
 
 %start program
 
-%union {
-	int number;
-	char *value;
-}
-
 /* -------------------- Tokens ----------------------- */
 %token CLASS
 %token VOID TYPE
@@ -158,13 +153,13 @@ location:
 	;
 
 expr:
-	location
+ 	OP expr CP
+	| location
 	| method_call
 	| literal
 	| expr bin_op expr
 	| SUB expr
 	| NOT expr
-	| OP expr CP
 	;
 
 bin_op:
