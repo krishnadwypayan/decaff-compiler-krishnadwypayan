@@ -1,3 +1,6 @@
+#ifndef DECAF_COMPILER_ASTNODE_H
+#define DECAF_COMPILER_ASTNODE_H
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -19,3 +22,5 @@ public:
     virtual void accept(ASTvisitor& V) = 0;
 
 };
+
+#endif // !DECAF_COMPILER_ASTNODE_H
