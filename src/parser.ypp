@@ -11,7 +11,7 @@
 	extern union Node yylval;
 	int errors = 0;
 	void yyerror(const char *s);
-	class Program* start = NULL;
+	class Program* root = NULL;
 %}
 
 %start program
@@ -49,7 +49,7 @@
 program:
 	CLASS ID OFB field_declarations method_declarations CFB { 
 		$$ = new Program(string($2)); 
-		start = $$;
+		root = $$;
 		}
 	;
 
@@ -63,14 +63,13 @@ field_declaration:
 	;
 
 vars:
-	ID var
-	| ID OSB INT_LITERAL CSB var
+	var
+	| vars COMMA var
 	;
 
 var:
-	/* epsilon */
-	| COMMA ID var
-	| COMMA ID OSB INT_LITERAL CSB var
+	ID
+	| ID OSB INT_LITERAL CSB
 	;
 
 method_declarations:
