@@ -21,8 +21,7 @@ int_literal {decimal_literal}|{hex_literal}
 
 "class"     		{ return CLASS; }
 "void"      		{ return VOID; }
-"int"       		{ return TYPE; }
-"boolean"   		{ return TYPE; }
+"int"|"boolean"		{ yylval.value = strdup(yytext); return TYPE; }
 "callout"			{ return CALLOUT; }
 "return"    		{ return RETURN; }
 "for"				{ return FOR; }

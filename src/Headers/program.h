@@ -7,12 +7,21 @@
 #define YYSTYPE_IS_DECLARED 1
 
 #include "astNode.h"
+#include "fieldDeclarations.h"
 
 union Node {
     int number;
     char* value;
 
     class Program *program;
+
+    class FieldDeclarations *fieldDeclarations;
+
+    class FieldDeclaration *fieldDeclaration;
+
+    class Variables *vars;
+
+    class Variable *var;
 };
 
 typedef union Node YYSTYPE;
@@ -22,12 +31,11 @@ private:
     // Name of the class that the Decaf Program begins with.
     string className;
 
-    class FieldDeclarations *fieldDecs;
+    class FieldDeclarations *fieldDeclarations;
 
-    class MethodDeclarations *methodDecs;
 
 public:
-    Program(string name);
+    Program(string name, class FieldDeclarations *fieldDecls);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
