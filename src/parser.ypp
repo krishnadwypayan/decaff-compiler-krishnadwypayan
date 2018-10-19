@@ -59,7 +59,7 @@ program:
 	;
 
 field_declarations:
-	/* epsilon */										{ $$ = new FieldDeclarations(); }
+	/* epsilon */		{ $$ = new FieldDeclarations(); }
 	| field_declarations field_declaration SEMI_COLON	{ $$->addFieldDeclaration($2); }
 	;
 
@@ -68,12 +68,12 @@ field_declaration:
 	;
 
 vars:
-	var 				{ $$ = new Variables(); $$->addVariable($1); }
+	var 	{ $$ = new Variables(); $$->addVariable($1); }
 	| vars COMMA var 	{ $$->addVariable($3); }
 	;
 
 var:
-	ID 							{ $$ = new Variable(string($1)); }
+	ID 		{ $$ = new Variable(string($1)); }
 	| ID OSB INT_LITERAL CSB 	{ $$ = new Variable(string($1), $3); }
 	;
 
