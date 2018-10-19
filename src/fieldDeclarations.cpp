@@ -5,16 +5,12 @@
 void FieldDeclarations::addFieldDeclaration(class FieldDeclaration *fieldDecl) {
     this->FieldDeclarationsVector.push_back(fieldDecl);
 }
-// ------------------------------------------------------------------- //
-
 
 // --------- Class definitions for class FieldDeclaration ------------ //
 FieldDeclaration::FieldDeclaration(string dataType, class Variables *vars) {
     this->dataType = dataType;
     this->variablesVector = vars->getVariablesVector();
 }
-// ------------------------------------------------------------------- //
-
 
 // ------------- Class definitions for class Variables --------------- //
 void Variables::addVariable(class Variable *var) {
@@ -24,8 +20,6 @@ void Variables::addVariable(class Variable *var) {
 vector<class Variable*> Variables::getVariablesVector() {
     return this->variablesVector;
 }
-// ------------------------------------------------------------------- //
-
 
 // ------------- Class definitions for class Variable ----------------- //
 Variable::Variable(string name) {
@@ -50,4 +44,3 @@ int Variable::getArraySize() {
 
     return -1;
 }
-// ------------------------------------------------------------------- //
