@@ -3,8 +3,10 @@
 
 class Program {
 
+	int a , b , x , arr[10] ;
+	boolean boolVar ; 
+
 	int main () {
-		int x ;
 		x = 10 ;
 		return ;
 	}
