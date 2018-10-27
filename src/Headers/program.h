@@ -8,6 +8,9 @@
 
 #include "astNode.h"
 #include "fieldDeclarations.h"
+#include "methodDeclarations.h"
+#include "block.h"
+#include "statements.h"
 
 union Node {
     int number;
@@ -22,6 +25,44 @@ union Node {
     class Variables *vars;
 
     class Variable *var;
+
+    class MethodDeclarations *methodDeclarations;
+
+    class MethodDeclaration *methodDeclaration;
+
+    class MethodArgs *methodArgs;
+
+    class MethodArg *methodArg;
+
+    class Block *block;
+
+    class VarDeclarations *varDeclarations;
+
+    class VarDeclaration *varDeclaration;
+
+    class MoreIDs *moreIds;
+
+    class Statements *stmts;
+
+    class Statement *stmt;
+
+    class AssignmentStmt *assgnStmt;
+
+    class Location *loc;
+
+    class Expression *expr;
+
+    class AssgnOp *assgnOp;
+
+    class MethodCallStmt *methodCallStmt;
+
+    class MethodCallParams *methodCallParams;
+
+    class CalloutArgs *calloutArgs;
+
+    class CalloutArg *calloutArg;
+
+    class Literal *literal;
 };
 
 typedef union Node YYSTYPE;
@@ -33,9 +74,11 @@ private:
 
     class FieldDeclarations *fieldDeclarations;
 
+    class MethodDeclarations *methodDeclarations;
+
 
 public:
-    Program(string name, class FieldDeclarations *fieldDecls);
+    Program(string name, class FieldDeclarations *fieldDecls, class MethodDeclarations *methodDecls);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
