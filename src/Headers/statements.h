@@ -57,7 +57,7 @@ public:
 };
 
 // ------------------------------------------------------------------------------
-class MethodCallStmt: public Statement {
+class MethodCallStmt: public Statement, public Expression {
 protected:
     string methodName;
 
@@ -147,8 +147,6 @@ private:
     class Block *elseBlock;
 
 public:
-    IfElseStmt(class Expression *expr, class Block *ifBlock);
-
     IfElseStmt(class Expression *expr, class Block *ifBlock, class Block *elseBlock);
 
     virtual void accept(ASTvisitor &v) {
@@ -181,8 +179,6 @@ private:
     class Expression *expr;
 
 public:
-    ReturnStmt();
-
     ReturnStmt(class Expression *expr);
 
     virtual void accept(ASTvisitor &v) {

@@ -56,6 +56,8 @@ union Node {
 
     class MethodCall *methodCall;
 
+    class MethodCallStmt *methodCallStmt;
+
     class MethodCallParams *methodCallParams;
 
     class CalloutArgs *calloutArgs;

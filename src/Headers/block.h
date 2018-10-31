@@ -3,24 +3,6 @@
 
 #include "astNode.h"
 
-// -------------------------------------------------------------------------------
-
-class Block: public ASTnode {
-private:
-    class VarDeclarations *varDecls;
-
-    class Statements *stmts;
-
-public:
-    Block(class VarDeclarations *varDecls, class Statements *stmts);
-
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
-};
-
-// -------------------------------------------------------------------------------
-
 class VarDeclarations: public ASTnode {
 private:
     vector<class VarDeclaration*> varDeclsVector;
@@ -88,6 +70,22 @@ public:
 class Statement: public ASTnode {
 public:
     Statement() = default;
+
+    virtual void accept(ASTvisitor &v) {
+        v.visit(*this);
+    }
+};
+
+// -------------------------------------------------------------------------------
+
+class Block: public Statement {
+private:
+    class VarDeclarations *varDecls;
+
+    class Statements *stmts;
+
+public:
+    Block(class VarDeclarations *varDecls, class Statements *stmts);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);

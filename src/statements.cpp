@@ -57,11 +57,6 @@ CalloutArg::CalloutArg(class Expression *expr) {
 }
 
 // ------------- Class definitions for class IfElseStmt -------------- //
-IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock) {
-    this->ifExpr = expr;
-    this->ifBlock = ifBlock;
-}
-
 IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock, class Block *elseBlock) {
     this->ifExpr = expr;
     this->ifBlock = ifBlock;

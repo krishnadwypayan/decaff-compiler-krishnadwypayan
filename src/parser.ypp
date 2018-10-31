@@ -51,13 +51,14 @@
 %type <methodDeclarations> method_declarations
 %type <methodDeclaration> method_declaration
 %type <methodArgs> method_args
-%type <methodArg> method_arg
+%type <methodArgs> method_arg
 %type <block> block
 %type <varDeclarations> var_declarations
 %type <varDeclaration> var_declaration
 %type <moreIds> more_ids
 %type <stmts> statements
 %type <stmt> statement
+%type <assgnStmt> assignment
 %type <loc> location
 %type <assgnOp> assign_op
 %type <methodCallStmt> method_call
@@ -65,7 +66,7 @@
 %type <calloutArgs> callout_args
 %type <calloutArg> callout_arg
 %type <literal> literal 
-
+%type <expr> expr
 
 /* ----------------- Grammar Rules ------------------ */
 %%
@@ -171,16 +172,20 @@ statements:
 	;
 
 statement:
-	location assign_op expr SEMI_COLON		{ $$ = new AssignmentStmt($1, $2, $3); }
+	assignment 		{ $$ = $1; }
 	| method_call SEMI_COLON	{ $$ = $1; }
-	| IF OP expr CP block 	{ $$ = new IfElseStmt($3, $5); }
+	| IF OP expr CP block 	{ $$ = new IfElseStmt($3, $5, NULL); }
 	| IF OP expr CP block ELSE block 	{ $$ = new IfElseStmt($3, $5, $7); }
 	| FOR ID EQUAL expr COMMA expr block 	{ $$ = new ForStmt(string($2), $4, $6, $7); }
-	| RETURN SEMI_COLON 	{ $$ = new ReturnStmt(); }
+	| RETURN SEMI_COLON 	{ $$ = new ReturnStmt(NULL); }
 	| RETURN expr SEMI_COLON 	{ $$ = new ReturnStmt($2); }
 	| BREAK SEMI_COLON 		{ $$ = new BreakStmt(); }
 	| CONTINUE SEMI_COLON 	{ $$ = new ContinueStmt(); }
 	| block 	{ $$ = $1; }
+	;
+
+assignment:
+	location assign_op expr SEMI_COLON		{ $$ = new AssignmentStmt($1, $2, $3); }
 	;
 
 assign_op:
@@ -190,8 +195,8 @@ assign_op:
 	;
 
 method_call:
-	ID OP method_call_params CP 	{ $$ = new MethodCallStmt(string($1), $2); }
-	| CALLOUT OP STRING_LITERAL callout_args CP 	{ $$ = new CalloutMethodCallStmt(string($3), $4); }
+	ID OP method_call_params CP 	{ $$ = new MethodCall(string($1), $3); }
+	| CALLOUT OP STRING_LITERAL callout_args CP 	{ $$ = new CalloutMethodCall(string($3), $4); }
 	;
 
 method_call_params:
