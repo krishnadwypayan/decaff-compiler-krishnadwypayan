@@ -22,7 +22,7 @@ public:
 };
 
 enum LocationType {
-    normal = 1, array = 2
+    normalLoc = 1, arrayLoc = 2
 };
 
 class Location: public Expression {
@@ -58,29 +58,35 @@ public:
 
 // ------------------------------------------------------------------------------
 class MethodCallStmt: public Statement {
-private:
+protected:
     string methodName;
-
-    class MethodCallParams* methodCallParams;
 
 public:
     MethodCallStmt() = default;
-
-    MethodCallStmt(string methodName, class MethodCallParams *methodCallParams);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
     }
 };
 
-class CalloutMethodCallStmt: public Statement {
+class MethodCall: public MethodCallStmt {
 private:
-    string calloutMethodName;
+    class MethodCallParams* methodCallParams;
 
+public:
+    MethodCall(string methodName, class MethodCallParams *methodCallParams);
+
+    virtual void accept(ASTvisitor &v) {
+        v.visit(*this);
+    }
+};
+
+class CalloutMethodCall: public MethodCallStmt {
+private:
     class CalloutArgs* calloutArgs;
 
 public:
-    CalloutMethodCallStmt(string calloutMethodName, class CalloutArgs *calloutArgs);
+    CalloutMethodCall(string calloutMethodName, class CalloutArgs *calloutArgs);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -175,7 +181,7 @@ private:
     class Expression *expr;
 
 public:
-    ReturnStmt() {}
+    ReturnStmt();
 
     ReturnStmt(class Expression *expr);
 

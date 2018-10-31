@@ -54,7 +54,7 @@ union Node {
 
     class AssgnOp *assgnOp;
 
-    class MethodCallStmt *methodCallStmt;
+    class MethodCall *methodCall;
 
     class MethodCallParams *methodCallParams;
 

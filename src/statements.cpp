@@ -10,13 +10,13 @@ AssignmentStmt::AssignmentStmt(class Location *loc, class AssgnOp *op, class Exp
 // --------------- Class definitions for class Location ---------------- //
 Location::Location(string id) {
     this->exprType = ExprType::location;
-    this->locType = LocationType::normal;
+    this->locType = LocationType::normalLoc;
     this->id = id;
 }
 
 Location::Location(string id, class Expression *expr) {
     this->exprType = ExprType::location;
-    this->locType = LocationType::array;
+    this->locType = LocationType::arrayLoc;
     this->id = id;
     this->expr = expr;
 }
@@ -27,7 +27,7 @@ AssgnOp::AssgnOp(string op) {
 }
 
 // ------------ Class definitions for class MethodCallStmt ------------ //
-MethodCallStmt::MethodCallStmt(string methodName, class MethodCallParams *methodCallParams) {
+MethodCall::MethodCall(string methodName, class MethodCallParams *methodCallParams) {
     this->methodName = methodName;
     this->methodCallParams = methodCallParams;
 }
@@ -38,8 +38,8 @@ void MethodCallParams::addMethodCallParam(class Expression *expr) {
 }
 
 // -------- Class definitions for class CalloutMethodCallStmt --------- //
-CalloutMethodCallStmt::CalloutMethodCallStmt(string calloutMethodName, class CalloutArgs *calloutArgs) {
-    this->calloutMethodName = calloutMethodName;
+CalloutMethodCall::CalloutMethodCall(string calloutMethodName, class CalloutArgs *calloutArgs) {
+    this->methodName = calloutMethodName;
     this->calloutArgs = calloutArgs;
 }
 
@@ -54,6 +54,18 @@ CalloutArg::CalloutArg(string calloutArgStringLit) {
 
 CalloutArg::CalloutArg(class Expression *expr) {
     this->expr = expr;
+}
+
+// ------------- Class definitions for class IfElseStmt -------------- //
+IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock) {
+    this->ifExpr = expr;
+    this->ifBlock = ifBlock;
+}
+
+IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock, class Block *elseBlock) {
+    this->ifExpr = expr;
+    this->ifBlock = ifBlock;
+    this->elseBlock = elseBlock;
 }
 
 // -------------- Class definitions for class ForStmt ---------------- //

@@ -1,6 +1,8 @@
 %{
 	#include <bits/stdc++.h>
 	#include "program.h"
+	#include "block.h"
+	#include "statements.h"
 	#define YYDEBUG 1
 	using namespace std;
 	extern "C" int yylex();
@@ -18,17 +20,17 @@
 
 /* -------------------- Tokens ----------------------- */
 %token CLASS
-%token VOID
+%token <value> VOID
 %token CALLOUT RETURN
 %token FOR IF ELSE
 %token BREAK CONTINUE
 %token SEMI_COLON COMMA
 %token OSB CSB OP CP OFB CFB
-%token EQUAL PLUS_EQUAL MINUS_EQUAL
-%token ADD SUB DIV MUL MOD
-%token LT GT LE GE
-%token EQUAL_EQUAL NOT_EQUAL
-%token COND_AND COND_OR NOT
+%token <value> EQUAL PLUS_EQUAL MINUS_EQUAL
+%token <value> ADD SUB DIV MUL MOD
+%token <value> LT GT LE GE
+%token <value> EQUAL_EQUAL NOT_EQUAL
+%token <value> COND_AND COND_OR NOT
 %token <value> ID CHAR_LITERAL STRING_LITERAL BOOL_LITERAL TYPE
 %token <number> INT_LITERAL
 
@@ -178,7 +180,7 @@ statement:
 	| RETURN expr SEMI_COLON 	{ $$ = new ReturnStmt($2); }
 	| BREAK SEMI_COLON 		{ $$ = new BreakStmt(); }
 	| CONTINUE SEMI_COLON 	{ $$ = new ContinueStmt(); }
-	| block 	{ $$ = new Block($1); }
+	| block 	{ $$ = $1; }
 	;
 
 assign_op:

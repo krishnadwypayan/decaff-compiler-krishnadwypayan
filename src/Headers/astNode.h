@@ -25,7 +25,8 @@ class AssignmentStmt;
 class Location;
 class AssgnOp;
 class MethodCallStmt;
-class CalloutMethodCallStmt;
+class MethodCall;
+class CalloutMethodCall;
 class MethodCallParams;
 class CalloutArgs;
 class CalloutArg;
@@ -81,8 +82,10 @@ public:
     virtual void visit(AssgnOp &assgnOp);
     
     virtual void visit(MethodCallStmt &methCallStmt);
+
+    virtual void visit(MethodCall &methCall);
     
-    virtual void visit(CalloutMethodCallStmt &calloutMethCallStmt);
+    virtual void visit(CalloutMethodCall &calloutMethCallStmt);
     
     virtual void visit(MethodCallParams &methCallParams);
     
