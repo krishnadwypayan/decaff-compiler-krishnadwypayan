@@ -21,13 +21,13 @@ public:
 class FieldDeclaration: public ASTnode {
 private:
     // DataType of the variable(s)
-    string dataType;
+    char* dataType;
 
     // Variables list that is returned by the object of class Variables
     vector<class Variable*> variablesVector;
 
 public:
-    FieldDeclaration(string dataType, class Variables *vars);
+    FieldDeclaration(char* dataType, class Variables *vars);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -61,7 +61,7 @@ public:
 class Variable: public ASTnode {
 private:
     // Name of the variable (ID)
-    string name;
+    char* name;
 
     // VarType
     VarType type;
@@ -71,10 +71,10 @@ private:
 
 public:
     // Constructor for normal type variable
-    Variable(string name);
+    Variable(char* name);
 
     // Constructor for array type variable
-    Variable(string name, int size);
+    Variable(char* name, int size);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);

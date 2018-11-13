@@ -7,7 +7,7 @@ void FieldDeclarations::addFieldDeclaration(class FieldDeclaration *fieldDecl) {
 }
 
 // --------- Class definitions for class FieldDeclaration ------------ //
-FieldDeclaration::FieldDeclaration(string dataType, class Variables *vars) {
+FieldDeclaration::FieldDeclaration(char* dataType, class Variables *vars) {
     this->dataType = dataType;
     this->variablesVector = vars->getVariablesVector();
 }
@@ -22,12 +22,12 @@ vector<class Variable*> Variables::getVariablesVector() {
 }
 
 // ------------- Class definitions for class Variable ----------------- //
-Variable::Variable(string name) {
+Variable::Variable(char* name) {
     this->type = VarType::normal;
     this->name = name;
 }
 
-Variable::Variable(string name, int size) {
+Variable::Variable(char* name, int size) {
     this->type = VarType::array;
     this->name = name;
     this->size = size;

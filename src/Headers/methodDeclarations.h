@@ -21,10 +21,10 @@ public:
 class MethodDeclaration: public ASTnode {
 private:
     // method return type (int/boolean/void)
-    string type;
+    char* type;
 
     // method name
-    string methodName;
+    char* methodName;
 
     // Args for the method
     class MethodArgs *methodArgs;
@@ -33,7 +33,7 @@ private:
     class Block *block;
 
 public:
-    MethodDeclaration(string type, string methodName, class MethodArgs *methodArgs, class Block *block);
+    MethodDeclaration(char* type, char* methodName, class MethodArgs *methodArgs, class Block *block);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -57,13 +57,13 @@ public:
 class MethodArg: public ASTnode {
 private:
     // DataType of the arg
-    string type;
+    char* type;
 
     // identifier of the arg
-    string name;
+    char* name;
 
 public:
-    MethodArg(string type, string name);
+    MethodArg(char* type, char* name);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);

@@ -13,13 +13,13 @@ void VarDeclarations::addVarDecl(class VarDeclaration *varDecl) {
 }
 
 // ---------- Class Definitions for class VarDeclaration ------------ //
-VarDeclaration::VarDeclaration(string type, class MoreIDs *moreIds) {
+VarDeclaration::VarDeclaration(char* type, class MoreIDs *moreIds) {
     this->type = type;
     this->moreIds = moreIds;
 }
 
 // ------------- Class Definitions for class MoreIDs --------------- //
-void MoreIDs::addId(string id) {
+void MoreIDs::addId(char* id) {
     this->idVector.push_back(id);
 }
 

@@ -60,7 +60,7 @@
 %type <stmt> statement
 %type <assgnStmt> assignment
 %type <loc> location
-%type <assgnOp> assign_op
+%type <value> assign_op
 %type <methodCallStmt> method_call
 %type <methodCallParams> method_call_params
 %type <calloutArgs> callout_args
@@ -74,7 +74,7 @@
 program:
 	CLASS ID OFB field_declarations method_declarations CFB 	
 		{ 
-			$$ = new Program(string($2), $4, $5); 
+			$$ = new Program($2, $4, $5); 
 			root = $$;
 		}
 	;
@@ -85,7 +85,7 @@ field_declarations:
 	;
 
 field_declaration:
-	TYPE vars 	{ $$ = new FieldDeclaration(string($1), $2); }
+	TYPE vars 	{ $$ = new FieldDeclaration($1, $2); }
 	;
 
 vars:
@@ -94,8 +94,8 @@ vars:
 	;
 
 var:
-	ID 		{ $$ = new Variable(string($1)); }
-	| ID OSB INT_LITERAL CSB 	{ $$ = new Variable(string($1), $3); }
+	ID 		{ $$ = new Variable($1); }
+	| ID OSB INT_LITERAL CSB 	{ $$ = new Variable($1, $3); }
 	;
 
 method_declarations:
@@ -108,15 +108,15 @@ method_declarations:
 	;
 
 method_declaration:
-	TYPE ID method_args block	{ $$ = new MethodDeclaration(string($1), string($2), $3, $4); }
-	| VOID ID method_args block		{ $$ = new MethodDeclaration(string($1), string($2), $3, $4); }
+	TYPE ID method_args block	{ $$ = new MethodDeclaration($1, $2, $3, $4); }
+	| VOID ID method_args block		{ $$ = new MethodDeclaration($1, $2, $3, $4); }
 	;
 
 method_args:
 	OP CP 	{ $$ = new MethodArgs(); }
 	| OP TYPE ID method_arg CP 		
 		{
-			MethodArg *methodArg = new MethodArg(string($2), string($3));
+			MethodArg *methodArg = new MethodArg($2, $3);
 			$4->addMethodArg(methodArg);
 			$$ = $4;
 		}
@@ -126,7 +126,7 @@ method_arg:
 	/* epsilon */	{ $$ = new MethodArgs(); }
 	| COMMA TYPE ID method_arg
 		{
-			MethodArg *methodArg = new MethodArg(string($2), string($3));
+			MethodArg *methodArg = new MethodArg($2, $3);
 			$4->addMethodArg(methodArg);
 			$$ = $4;
 		}
@@ -148,8 +148,8 @@ var_declarations:
 var_declaration:
 	TYPE ID more_ids	
 		{ 
-			$3->addId(string($2)); 
-			$$ = new VarDeclaration(string($1), $3); 
+			$3->addId($2); 
+			$$ = new VarDeclaration($1, $3); 
 		}
 	;
 
@@ -157,7 +157,7 @@ more_ids:
 	/* epsilon */	{ $$ = new MoreIDs(); }
 	| COMMA ID more_ids	
 		{
-			$3->addId(string($2));
+			$3->addId($2);
 			$$ = $3;
 		}
 	;
@@ -176,7 +176,7 @@ statement:
 	| method_call SEMI_COLON	{ $$ = $1; }
 	| IF OP expr CP block 	{ $$ = new IfElseStmt($3, $5, NULL); }
 	| IF OP expr CP block ELSE block 	{ $$ = new IfElseStmt($3, $5, $7); }
-	| FOR ID EQUAL expr COMMA expr block 	{ $$ = new ForStmt(string($2), $4, $6, $7); }
+	| FOR ID EQUAL expr COMMA expr block 	{ $$ = new ForStmt($2, $4, $6, $7); }
 	| RETURN SEMI_COLON 	{ $$ = new ReturnStmt(NULL); }
 	| RETURN expr SEMI_COLON 	{ $$ = new ReturnStmt($2); }
 	| BREAK SEMI_COLON 		{ $$ = new BreakStmt(); }
@@ -189,14 +189,14 @@ assignment:
 	;
 
 assign_op:
-	EQUAL 		{ $$ = new AssgnOp(string($1)); }
-	| PLUS_EQUAL	{ $$ = new AssgnOp(string($1)); }
-	| MINUS_EQUAL	{ $$ = new AssgnOp(string($1)); }
+	EQUAL 		{ $$ = $1; }
+	| PLUS_EQUAL	{ $$ = $1; }
+	| MINUS_EQUAL	{ $$ = $1; }
 	;
 
 method_call:
-	ID OP method_call_params CP 	{ $$ = new MethodCall(string($1), $3); }
-	| CALLOUT OP STRING_LITERAL callout_args CP 	{ $$ = new CalloutMethodCall(string($3), $4); }
+	ID OP method_call_params CP 	{ $$ = new MethodCall($1, $3); }
+	| CALLOUT OP STRING_LITERAL callout_args CP 	{ $$ = new CalloutMethodCall($3, $4); }
 	;
 
 method_call_params:
@@ -215,12 +215,12 @@ callout_args:
 
 callout_arg:
 	expr 	{ $$ = new CalloutArg($1); }
-	| STRING_LITERAL	{ $$ = new CalloutArg(string($1)); }
+	| STRING_LITERAL	{ $$ = new CalloutArg($1); }
 	;
 
 location:
-	ID 		{ $$ = new Location(string($1)); }
-	| ID OSB expr CSB	{ $$ = new Location(string($1), $3); }
+	ID 		{ $$ = new Location($1); }
+	| ID OSB expr CSB	{ $$ = new Location($1, $3); }
 	;
 
 expr:
@@ -228,27 +228,27 @@ expr:
 	| location 		{ $$ = $1; }
 	| method_call 	{ $$ = $1; }
 	| literal 	{ $$ = $1; }
-	| expr ADD expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr SUB expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr MUL expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr DIV expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr MOD expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr LT expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr GT expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr LE expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr GE expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr EQUAL_EQUAL expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr NOT_EQUAL expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr COND_AND expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| expr COND_OR expr 	{ $$ = new BinaryExpression($1, string($2), $3); }
-	| SUB expr 		{ $$ = new UnaryExpression(string($1), $2); }
-	| NOT expr 		{ $$ = new UnaryExpression(string($1), $2); }
+	| expr ADD expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr SUB expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr MUL expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr DIV expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr MOD expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr LT expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr GT expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr LE expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr GE expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr EQUAL_EQUAL expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr NOT_EQUAL expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr COND_AND expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| expr COND_OR expr 	{ $$ = new BinaryExpression($1, $2, $3); }
+	| SUB expr 		{ $$ = new UnaryExpression($1, $2); }
+	| NOT expr 		{ $$ = new UnaryExpression($1, $2); }
 	;
 
 literal:
 	INT_LITERAL 	{ $$ = new Literal($1, 1); }
-	| CHAR_LITERAL 	{ $$ = new Literal(string($1), 2); }
-	| BOOL_LITERAL	{ $$ = new Literal(string($1), 3); }
+	| CHAR_LITERAL 	{ $$ = new Literal($1, 2); }
+	| BOOL_LITERAL	{ $$ = new Literal($1, 3); }
 	;
 
 %%

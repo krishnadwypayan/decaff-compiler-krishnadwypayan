@@ -11,10 +11,10 @@ private:
 
     class Expression *expr;
 
-    class AssgnOp *assgnOp;
+    char* assgnOp;
 
 public:
-    AssignmentStmt(class Location *loc, class AssgnOp *op, class Expression *expr);
+    AssignmentStmt(class Location *loc, char* op, class Expression *expr);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -27,7 +27,7 @@ enum LocationType {
 
 class Location: public Expression {
 private:
-    string id;
+    char* id;
 
     LocationType locType;
 
@@ -35,9 +35,9 @@ private:
     class Expression *expr;
 
 public:
-    Location(string id);
+    Location(char* id);
 
-    Location(string id, class Expression *expr);
+    Location(char* id, class Expression *expr);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -46,10 +46,10 @@ public:
 
 class AssgnOp {
 private:
-    string assgnOp;
+    char* assgnOp;
 
 public:
-    AssgnOp(string assgnOp);
+    AssgnOp(char* assgnOp);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -59,7 +59,7 @@ public:
 // ------------------------------------------------------------------------------
 class MethodCallStmt: public Statement, public Expression {
 protected:
-    string methodName;
+    char* methodName;
 
 public:
     MethodCallStmt() = default;
@@ -74,7 +74,7 @@ private:
     class MethodCallParams* methodCallParams;
 
 public:
-    MethodCall(string methodName, class MethodCallParams *methodCallParams);
+    MethodCall(char* methodName, class MethodCallParams *methodCallParams);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -86,7 +86,7 @@ private:
     class CalloutArgs* calloutArgs;
 
 public:
-    CalloutMethodCall(string calloutMethodName, class CalloutArgs *calloutArgs);
+    CalloutMethodCall(char* calloutMethodName, class CalloutArgs *calloutArgs);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -123,12 +123,12 @@ public:
 
 class CalloutArg: public ASTnode {
 private:
-    string stringLit;
+    char* stringLit;
 
     class Expression *expr;
 
 public:
-    CalloutArg(string calloutArgStringLit);
+    CalloutArg(char* calloutArgStringLit);
 
     CalloutArg(class Expression *expr);
 
@@ -157,7 +157,7 @@ public:
 // ------------------------------------------------------------------------------
 class ForStmt: public Statement {
 private:
-    string id;
+    char* id;
 
     class Expression *expr1;
 
@@ -166,7 +166,7 @@ private:
     class Block *block;
 
 public:
-    ForStmt(string id, class Expression *expr1, class Expression *expr2, class Block *block);
+    ForStmt(char* id, class Expression *expr1, class Expression *expr2, class Block *block);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -227,12 +227,12 @@ private:
 
     int intLit;
 
-    string otherLiteral;
+    char* otherLiteral;
 
 public:
     Literal(int intLit, int litVal);
 
-    Literal(string otherLiteral, int litVal);
+    Literal(char* otherLiteral, int litVal);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -243,12 +243,12 @@ public:
 
 class UnaryExpression: public Expression {
 private:
-    string op;
+    char* op;
 
     class Expression *expr;
 
 public:
-    UnaryExpression(string op, class Expression *expr);
+    UnaryExpression(char* op, class Expression *expr);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -261,12 +261,12 @@ class BinaryExpression: public Expression {
 private:
     class Expression *expr1;
 
-    string op;
+    char* op;
 
     class Expression *expr2;
 
 public:
-    BinaryExpression(class Expression *expr1, string op, class Expression *expr2);
+    BinaryExpression(class Expression *expr1, char* op, class Expression *expr2);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);

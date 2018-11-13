@@ -7,7 +7,7 @@ void MethodDeclarations::addMethodDecl(class MethodDeclaration *methodDecl) {
 }
 
 // --------- Class definitions for class MethodDeclaration ----------- //
-MethodDeclaration::MethodDeclaration(string type, string methodName, class MethodArgs *methodArgs, class Block *block) {
+MethodDeclaration::MethodDeclaration(char* type, char* methodName, class MethodArgs *methodArgs, class Block *block) {
     this->type = type;
     this->methodName = methodName;
     this->methodArgs = methodArgs;
@@ -20,7 +20,7 @@ void MethodArgs::addMethodArg(class MethodArg *methodArg) {
 }
 
 // ------------ Class definitions for class MethodArg ---------------- //
-MethodArg::MethodArg(string type, string name) {
+MethodArg::MethodArg(char* type, char* name) {
     this->type = type;
     this->name = name;
 }

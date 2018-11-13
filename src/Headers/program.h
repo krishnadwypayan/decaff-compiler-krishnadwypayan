@@ -72,7 +72,7 @@ typedef union Node YYSTYPE;
 class Program: public ASTnode {
 private:
     // Name of the class that the Decaf Program begins with.
-    string className;
+    char* className;
 
     class FieldDeclarations *fieldDeclarations;
 
@@ -80,7 +80,7 @@ private:
 
 
 public:
-    Program(string name, class FieldDeclarations *fieldDecls, class MethodDeclarations *methodDecls);
+    Program(char* name, class FieldDeclarations *fieldDecls, class MethodDeclarations *methodDecls);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);

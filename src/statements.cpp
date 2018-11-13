@@ -1,20 +1,20 @@
 #include "Headers/statements.h"
 
 // ------------ Class definitions for class AssignmentStmt -------------- //
-AssignmentStmt::AssignmentStmt(class Location *loc, class AssgnOp *op, class Expression *expr) {
+AssignmentStmt::AssignmentStmt(class Location *loc, char* op, class Expression *expr) {
     this->location = loc;
     this->assgnOp = op;
     this->expr = expr;
 }
 
 // --------------- Class definitions for class Location ---------------- //
-Location::Location(string id) {
+Location::Location(char* id) {
     this->exprType = ExprType::location;
     this->locType = LocationType::normalLoc;
     this->id = id;
 }
 
-Location::Location(string id, class Expression *expr) {
+Location::Location(char* id, class Expression *expr) {
     this->exprType = ExprType::location;
     this->locType = LocationType::arrayLoc;
     this->id = id;
@@ -22,12 +22,12 @@ Location::Location(string id, class Expression *expr) {
 }
 
 // --------------- Class definitions for class AssgnOp ---------------- //
-AssgnOp::AssgnOp(string op) {
+AssgnOp::AssgnOp(char* op) {
     this->assgnOp = op;
 }
 
 // ------------ Class definitions for class MethodCallStmt ------------ //
-MethodCall::MethodCall(string methodName, class MethodCallParams *methodCallParams) {
+MethodCall::MethodCall(char* methodName, class MethodCallParams *methodCallParams) {
     this->methodName = methodName;
     this->methodCallParams = methodCallParams;
 }
@@ -38,7 +38,7 @@ void MethodCallParams::addMethodCallParam(class Expression *expr) {
 }
 
 // -------- Class definitions for class CalloutMethodCallStmt --------- //
-CalloutMethodCall::CalloutMethodCall(string calloutMethodName, class CalloutArgs *calloutArgs) {
+CalloutMethodCall::CalloutMethodCall(char* calloutMethodName, class CalloutArgs *calloutArgs) {
     this->methodName = calloutMethodName;
     this->calloutArgs = calloutArgs;
 }
@@ -48,7 +48,7 @@ void CalloutArgs::addCalloutArg(class CalloutArg *calloutArg) {
     this->calloutArgsVector.push_back(calloutArg);
 }
 
-CalloutArg::CalloutArg(string calloutArgStringLit) {
+CalloutArg::CalloutArg(char* calloutArgStringLit) {
     this->stringLit = calloutArgStringLit;
 }
 
@@ -64,7 +64,7 @@ IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock, class Block
 }
 
 // -------------- Class definitions for class ForStmt ---------------- //
-ForStmt::ForStmt(string id, class Expression *expr1, class Expression *expr2, class Block *block) {
+ForStmt::ForStmt(char* id, class Expression *expr1, class Expression *expr2, class Block *block) {
     this->id = id;
     this->expr1 = expr1;
     this->expr2 = expr2;
@@ -89,21 +89,21 @@ Literal::Literal(int litVal, int litType) {
     this->intLit = litVal;
 }
 
-Literal::Literal(string otherLiteral, int litType) {
+Literal::Literal(char* otherLiteral, int litType) {
     this->exprType = ExprType::literal;
     this->litType = litType;
     this->otherLiteral = otherLiteral;
 }
 
 // --------- Class definitions for class UnaryExpression ----------- //
-UnaryExpression::UnaryExpression(string op, class Expression *expr) {
+UnaryExpression::UnaryExpression(char* op, class Expression *expr) {
     this->exprType = ExprType::unary;
     this->op = op;
     this->expr = expr;
 }
 
 // -------- Class definitions for class BinaryExpression ----------- //
-BinaryExpression::BinaryExpression(class Expression *expr1, string op, class Expression *expr2) {
+BinaryExpression::BinaryExpression(class Expression *expr1, char* op, class Expression *expr2) {
     this->exprType = ExprType::binary;
     this->expr1 = expr1;
     this->op = op;

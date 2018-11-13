@@ -20,13 +20,13 @@ public:
 class VarDeclaration: public ASTnode {
 private:
     // Datatype of the variable
-    string type;
+    char* type;
 
     // object to the MoreIDs class that contains the vector of IDs of the particular type
     class MoreIDs *moreIds;
 
 public:
-    VarDeclaration(string type, class MoreIDs *moreIds);
+    VarDeclaration(char* type, class MoreIDs *moreIds);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
@@ -36,12 +36,12 @@ public:
 class MoreIDs: public ASTnode {
 private:
     // Vector of all the IDs
-    vector<string> idVector;
+    vector<char*> idVector;
 
 public:
     MoreIDs() = default;
 
-    void addId(string id);
+    void addId(char* id);
 
     virtual void accept(ASTvisitor &v) {
         v.visit(*this);
