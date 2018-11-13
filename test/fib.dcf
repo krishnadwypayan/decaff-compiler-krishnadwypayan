@@ -3,22 +3,22 @@
 
 class Program {
 
-	int arr [ 10 ] ;
+	int first , second;
 
 	int main () {
-		int a , b , i ;
-		a = 0 ;
-		b = 1 ;
+		int temp , i ;
+		
+		first = 0 ;
+		second = 1 ; 
 
-		arr [ 0 ] = 0 ;
-		arr [ 1 ] = 1 ; 
-
-		callout ( "printf" , "%d\t" , arr [ 0 ] ) ;
-		callout ( "printf" , "%d\t" , arr [ 1 ] ) ;
+		callout ( "printf" , "%d\t" , first ) ;
+		callout ( "printf" , "%d\t" , second ) ;
 
 		for i = 2 , 9 {
-			arr [ i ] = arr [ i - 1 ] + arr [ i - 2 ] ;
-			callout ( "printf" , "%d\t" , arr [ i ] ) ;
+			temp = second ;
+			second = first + second ;
+			first = temp ;
+			callout ( "printf" , "%d\t" , second ) ;
 			i += 1 ;
 		}
 
