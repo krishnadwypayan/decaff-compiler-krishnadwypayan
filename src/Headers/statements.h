@@ -15,10 +15,6 @@ private:
 
 public:
     AssignmentStmt(class Location *loc, char* op, class Expression *expr);
-
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 enum LocationType {
@@ -39,9 +35,6 @@ public:
 
     Location(char* id, class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class AssgnOp {
@@ -51,9 +44,6 @@ private:
 public:
     AssgnOp(char* assgnOp);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -64,9 +54,6 @@ protected:
 public:
     MethodCallStmt() = default;
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MethodCall: public MethodCallStmt {
@@ -76,9 +63,6 @@ private:
 public:
     MethodCall(char* methodName, class MethodCallParams *methodCallParams);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class CalloutMethodCall: public MethodCallStmt {
@@ -88,9 +72,6 @@ private:
 public:
     CalloutMethodCall(char* calloutMethodName, class CalloutArgs *calloutArgs);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MethodCallParams: public ASTnode {
@@ -102,9 +83,6 @@ public:
 
     void addMethodCallParam(class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class CalloutArgs: public ASTnode {
@@ -116,9 +94,6 @@ public:
 
     void addCalloutArg(class CalloutArg *calloutArg);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class CalloutArg: public ASTnode {
@@ -132,9 +107,6 @@ public:
 
     CalloutArg(class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -149,9 +121,6 @@ private:
 public:
     IfElseStmt(class Expression *expr, class Block *ifBlock, class Block *elseBlock);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -168,9 +137,6 @@ private:
 public:
     ForStmt(char* id, class Expression *expr1, class Expression *expr2, class Block *block);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -181,9 +147,6 @@ private:
 public:
     ReturnStmt(class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -191,9 +154,6 @@ class BreakStmt: public Statement {
 public:
     BreakStmt() {}
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -201,9 +161,6 @@ class ContinueStmt: public Statement {
 public:
     ContinueStmt() {}
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -214,9 +171,6 @@ private:
 public:
     EnclosedExpression(class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -234,9 +188,6 @@ public:
 
     Literal(char* otherLiteral, int litVal);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -250,9 +201,6 @@ private:
 public:
     UnaryExpression(char* op, class Expression *expr);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // ------------------------------------------------------------------------------
@@ -268,11 +216,6 @@ private:
 public:
     BinaryExpression(class Expression *expr1, char* op, class Expression *expr2);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
-
-
 
 #endif // !DECAF_COMPILER_STATEMENTS_H

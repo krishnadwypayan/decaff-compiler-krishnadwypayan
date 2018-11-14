@@ -13,9 +13,6 @@ public:
 
     void addFieldDeclaration(class FieldDeclaration *fieldDecl);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class FieldDeclaration: public ASTnode {
@@ -28,10 +25,6 @@ private:
 
 public:
     FieldDeclaration(char* dataType, class Variables *vars);
-
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 
 };
 
@@ -53,9 +46,6 @@ public:
 
     vector<class Variable*> getVariablesVector();
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class Variable: public ASTnode {
@@ -75,10 +65,6 @@ public:
 
     // Constructor for array type variable
     Variable(char* name, int size);
-
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 
     string getVarName();
 

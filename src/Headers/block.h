@@ -12,9 +12,6 @@ public:
 
     void addVarDecl(class VarDeclaration *varDecl);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class VarDeclaration: public ASTnode {
@@ -28,9 +25,6 @@ private:
 public:
     VarDeclaration(char* type, class MoreIDs *moreIds);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MoreIDs: public ASTnode {
@@ -43,9 +37,6 @@ public:
 
     void addId(char* id);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // -------------------------------------------------------------------------------
@@ -58,9 +49,6 @@ public:
 
     void addStmt(class Statement *stmt);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // Type of statements
@@ -71,9 +59,6 @@ class Statement: public ASTnode {
 public:
     Statement() = default;
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // -------------------------------------------------------------------------------
@@ -87,9 +72,6 @@ private:
 public:
     Block(class VarDeclarations *varDecls, class Statements *stmts);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // -------------------------------------------------------------------------------
@@ -104,9 +86,6 @@ protected:
 public:
     Expression() = default;
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 // -------------------------------------------------------------------------------

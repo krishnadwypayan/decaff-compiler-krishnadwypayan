@@ -82,10 +82,6 @@ private:
 public:
     Program(char* name, class FieldDeclarations *fieldDecls, class MethodDeclarations *methodDecls);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
-
 };
 
 #endif

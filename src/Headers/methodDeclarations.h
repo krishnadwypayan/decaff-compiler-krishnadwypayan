@@ -13,9 +13,6 @@ public:
 
     void addMethodDecl(class MethodDeclaration *methodDecl);    
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MethodDeclaration: public ASTnode {
@@ -35,9 +32,6 @@ private:
 public:
     MethodDeclaration(char* type, char* methodName, class MethodArgs *methodArgs, class Block *block);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MethodArgs: public ASTnode {
@@ -49,9 +43,6 @@ public:
 
     void addMethodArg(class MethodArg *methodArg);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 class MethodArg: public ASTnode {
@@ -65,9 +56,6 @@ private:
 public:
     MethodArg(char* type, char* name);
 
-    virtual void accept(ASTvisitor &v) {
-        v.visit(*this);
-    }
 };
 
 #endif // !DECAF_COMPILER_METHOD_DECLARATIONS_H
