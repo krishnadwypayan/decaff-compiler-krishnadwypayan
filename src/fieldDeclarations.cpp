@@ -6,10 +6,55 @@ void FieldDeclarations::addFieldDeclaration(class FieldDeclaration *fieldDecl) {
     this->FieldDeclarationsVector.push_back(fieldDecl);
 }
 
+Value* FieldDeclarations::codeGen(Context *context) {
+    // call the codeGen() for every fieldDeclaration added to the vector
+    for (auto &fieldDecl : FieldDeclarationsVector) {
+        fieldDecl->codeGen(context);
+    }
+
+    Value *v = ConstantInt::get(context->llvmContext, APInt(32, 1));
+    return v;
+}
+
 // --------- Class definitions for class FieldDeclaration ------------ //
 FieldDeclaration::FieldDeclaration(char* dataType, class Variables *vars) {
     this->dataType = dataType;
     this->variablesVector = vars->getVariablesVector();
+}
+
+Value* FieldDeclaration::codeGen(Context *context) {
+    Type *type = nullptr;
+
+    if (dataType == "int") {
+        type = Type::getInt32Ty(context->llvmContext);
+    }
+    else if (dataType == "boolean") {
+        type = Type::getInt1Ty(context->llvmContext);
+    }
+
+    // create a global variable or every var according to the type (Array or normal)
+    for (auto var : variablesVector) {
+        if (var->isArray()) {
+            ArrayType *arrType = ArrayType::get(type, var->getArraySize());
+            GlobalVariable *globalVar = new GlobalVariable(*(context->moduleOb), arrType, false, 
+                                            GlobalValue::ExternalLinkage, nullptr, var->getVarName());
+            
+            // Set the initializer for this global variable, removing any 
+            // existing initializer if InitVal==NULL.
+            // If this GV has type T*, the initializer must have type T.
+            globalVar->setInitializer(ConstantAggregateZero::get(arrType));
+        }
+        else {
+            GlobalVariable *globalVar = new GlobalVariable(*(context->moduleOb), type, false, 
+                                            GlobalValue::ExternalLinkage, nullptr, var->getVarName());
+            globalVar->setInitializer(Constant::getNullValue(type));
+        }
+    }
+
+    // Return a ConstantInt with the specified value and an implied Type.
+    // The type is the integer type that corresponds to the bit width of the value.
+    Value *v = ConstantInt::get(context->llvmContext, APInt(32, 1));
+    return v;
 }
 
 // ------------- Class definitions for class Variables --------------- //
@@ -38,9 +83,17 @@ string Variable::getVarName() {
 }
 
 int Variable::getArraySize() {
-    if (this->type == VarType::array) {
-        return this->size;
+    if (type == VarType::array) {
+        return size;
     }
 
     return -1;
+}
+
+bool Variable::isArray() {
+    if (type == VarType::array) {
+        return true;
+    }
+
+    return false;
 }

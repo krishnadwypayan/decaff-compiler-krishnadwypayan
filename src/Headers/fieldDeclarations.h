@@ -13,6 +13,8 @@ public:
 
     void addFieldDeclaration(class FieldDeclaration *fieldDecl);
 
+    Value* codeGen(Context *context);
+
 };
 
 class FieldDeclaration: public ASTnode {
@@ -25,6 +27,8 @@ private:
 
 public:
     FieldDeclaration(char* dataType, class Variables *vars);
+
+    Value* codeGen(Context *context);
 
 };
 
@@ -69,6 +73,8 @@ public:
     string getVarName();
 
     int getArraySize();
+
+    bool isArray();
 };
 
 #endif // !DECAF_COMPILER_FIELD_DECLARATIONS_H
