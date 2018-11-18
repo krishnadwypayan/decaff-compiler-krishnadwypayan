@@ -12,6 +12,8 @@ public:
 
     void addVarDecl(class VarDeclaration *varDecl);
 
+    Value* codeGen(Context *context, map<char*, AllocaInst*> &oldMap);
+
 };
 
 class VarDeclaration: public ASTnode {
@@ -22,8 +24,15 @@ private:
     // object to the MoreIDs class that contains the vector of IDs of the particular type
     class MoreIDs *moreIds;
 
+    // vector of all the IDs
+    vector<char*> idVector;
+
 public:
     VarDeclaration(char* type, class MoreIDs *moreIds);
+
+    vector<char*> getIdVector();
+
+    Value* codeGen(Context *context, map<char*, AllocaInst*> &oldMap);
 
 };
 
@@ -37,6 +46,8 @@ public:
 
     void addId(char* id);
 
+    vector<char*> getIdVector();
+
 };
 
 // -------------------------------------------------------------------------------
@@ -49,6 +60,8 @@ public:
 
     void addStmt(class Statement *stmt);
 
+    Value* codeGen(Context *context);
+
 };
 
 // Type of statements
@@ -58,6 +71,8 @@ public:
 class Statement: public ASTnode {
 public:
     Statement() = default;
+
+    Value* codeGen(Context *context) {}
 
 };
 
@@ -72,6 +87,8 @@ private:
 public:
     Block(class VarDeclarations *varDecls, class Statements *stmts);
 
+    Value *codeGen(Context *context);
+
 };
 
 // -------------------------------------------------------------------------------
@@ -85,6 +102,12 @@ protected:
 
 public:
     Expression() = default;
+
+    ExprType getExprType() { 
+        return exprType;
+    }
+
+    virtual Value* codeGen(Context *context);
 
 };
 

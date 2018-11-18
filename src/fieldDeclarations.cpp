@@ -36,6 +36,9 @@ Value* FieldDeclaration::codeGen(Context *context) {
     for (auto var : variablesVector) {
         if (var->isArray()) {
             ArrayType *arrType = ArrayType::get(type, var->getArraySize());
+
+            // Linkage is what determines if multiple declarations of the same object 
+            // refer to the same object, or to separate ones.
             GlobalVariable *globalVar = new GlobalVariable(*(context->moduleOb), arrType, false, 
                                             GlobalValue::ExternalLinkage, nullptr, var->getVarName());
             

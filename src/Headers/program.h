@@ -82,7 +82,9 @@ private:
 public:
     Program(char* name, class FieldDeclarations *fieldDecls, class MethodDeclarations *methodDecls);
 
-    Value* codeGen(Context *context);
+    Context *context;
+
+    Value* codeGen();
 };
 
 #endif

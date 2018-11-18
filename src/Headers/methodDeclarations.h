@@ -13,6 +13,8 @@ public:
 
     void addMethodDecl(class MethodDeclaration *methodDecl);    
 
+    Value* codeGen(Context *context);
+
 };
 
 class MethodDeclaration: public ASTnode {
@@ -32,6 +34,7 @@ private:
 public:
     MethodDeclaration(char* type, char* methodName, class MethodArgs *methodArgs, class Block *block);
 
+    Value* codeGen(Context *context);
 };
 
 class MethodArgs: public ASTnode {

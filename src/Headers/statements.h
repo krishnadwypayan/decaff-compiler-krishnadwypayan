@@ -15,6 +15,8 @@ private:
 
 public:
     AssignmentStmt(class Location *loc, char* op, class Expression *expr);
+
+    Value* codeGen(Context *context);
 };
 
 enum LocationType {
@@ -35,6 +37,10 @@ public:
 
     Location(char* id, class Expression *expr);
 
+    char* getLoc();
+
+    Value* codeGen(Context *context);
+
 };
 
 class AssgnOp {
@@ -54,6 +60,8 @@ protected:
 public:
     MethodCallStmt() = default;
 
+    Value* codeGen(Context *context) override {}
+
 };
 
 class MethodCall: public MethodCallStmt {
@@ -63,6 +71,8 @@ private:
 public:
     MethodCall(char* methodName, class MethodCallParams *methodCallParams);
 
+    Value* codeGen(Context *context);
+
 };
 
 class CalloutMethodCall: public MethodCallStmt {
@@ -71,6 +81,8 @@ private:
 
 public:
     CalloutMethodCall(char* calloutMethodName, class CalloutArgs *calloutArgs);
+
+    Value* codeGen(Context *context);
 
 };
 
@@ -83,6 +95,10 @@ public:
 
     void addMethodCallParam(class Expression *expr);
 
+    vector<class Expression*> getMethodCallParamsVector() {
+        return methodCallParamsVector;
+    }
+
 };
 
 class CalloutArgs: public ASTnode {
@@ -93,6 +109,10 @@ public:
     CalloutArgs() = default;
 
     void addCalloutArg(class CalloutArg *calloutArg);
+
+    vector<class CalloutArg*> getCalloutArgsVector() {
+        return calloutArgsVector;
+    }
 
 };
 
@@ -106,6 +126,8 @@ public:
     CalloutArg(char* calloutArgStringLit);
 
     CalloutArg(class Expression *expr);
+
+    Value* codeGen(Context *context);
 
 };
 
@@ -147,6 +169,8 @@ private:
 public:
     ReturnStmt(class Expression *expr);
 
+    Value* codeGen(Context *context);
+
 };
 
 // ------------------------------------------------------------------------------
@@ -171,6 +195,8 @@ private:
 public:
     EnclosedExpression(class Expression *expr);
 
+    Value* codeGen(Context *context);
+
 };
 
 // ------------------------------------------------------------------------------
@@ -188,6 +214,8 @@ public:
 
     Literal(char* otherLiteral, int litVal);
 
+    Value* codeGen(Context *context);
+
 };
 
 // ------------------------------------------------------------------------------
@@ -200,6 +228,8 @@ private:
 
 public:
     UnaryExpression(char* op, class Expression *expr);
+
+    Value* codeGen(Context *context);
 
 };
 
@@ -215,6 +245,8 @@ private:
 
 public:
     BinaryExpression(class Expression *expr1, char* op, class Expression *expr2);
+
+    Value* codeGen(Context *context);
 
 };
 
