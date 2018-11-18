@@ -174,7 +174,7 @@ Value* CalloutMethodCall::codeGen(Context *context) {
 
     ArrayRef<Type*> paramTypesVector(argTypes);
     ArrayRef<Value*> paramsVector(args);
-    FunctionType *funcType = FunctionType::get(Type::getInt32Ty(context->llvmContext, paramTypesVector, false));
+    FunctionType *funcType = FunctionType::get(Type::getInt32Ty(context->llvmContext), paramTypesVector, false);
     Constant *func = context->moduleOb->getOrInsertFunction(methodName, funcType);
     if (func == nullptr) {
         cerr << "[error] callout method not found \n";
@@ -212,12 +212,160 @@ IfElseStmt::IfElseStmt(class Expression *expr, class Block *ifBlock, class Block
     this->elseBlock = elseBlock;
 }
 
+Value* IfElseStmt::codeGen(Context *context) {
+    Value *condValue = ifExpr->codeGen(context);
+    if (condValue == nullptr) {
+        cerr << "[error] if condition error \n";
+        return nullptr;
+    }
+
+    // Convert condition to a bool by comparing non-equal to 0.0.
+    condValue = context->builder->CreateFCmpONE(condValue, 
+                    ConstantFP::get(context->llvmContext, APFloat(0.0)), "ifcond");
+
+    Function *function = context->builder->GetInsertBlock()->getParent();
+
+    // Create blocks for the then and else cases.  Insert the 'then' block at the
+    // end of the function.
+    BasicBlock *thenBB = BasicBlock::Create(context->llvmContext, "then", function);
+    BasicBlock *elseBB = BasicBlock::Create(context->llvmContext, "else");
+    BasicBlock *mergeBB = BasicBlock::Create(context->llvmContext, "ifCont");
+
+    context->builder->CreateCondBr(condValue, thenBB, elseBB);
+
+    // Emit then value.
+    context->builder->SetInsertPoint(thenBB);
+
+    Value *thenValue = ifBlock->codeGen(context);
+    if (thenValue == nullptr) {
+        cerr << "[error] then block returned null \n";
+        return nullptr;
+    }
+
+    context->builder->CreateBr(mergeBB);
+
+    // Codegen of 'Then' can change the current block, update ThenBB for the PHI.
+    thenBB = context->builder->GetInsertBlock();
+
+    // One interesting (and very important) aspect of the LLVM IR is that it requires 
+    // all basic blocks to be “terminated” with a control flow instruction such as 
+    // return or branch. This means that all control flow, including fall throughs must be 
+    // made explicit in the LLVM IR. If you violate this rule, the verifier will emit an error.
+
+    // Emit else block.
+    function->getBasicBlockList().push_back(elseBB);
+    context->builder->SetInsertPoint(elseBB);
+
+    Value *elseValue = elseBlock->codeGen(context);
+    if (elseValue == nullptr) {
+        cerr << "[error] else block returned null \n";
+        return nullptr;
+    }
+
+    context->builder->CreateBr(mergeBB);
+    
+    // codegen of 'Else' can change the current block, update ElseBB for the PHI.
+    elseBB = context->builder->GetInsertBlock();
+
+    // Emit merge block.
+    function->getBasicBlockList().push_back(mergeBB);
+    context->builder->SetInsertPoint(mergeBB);
+
+    PHINode *PN = context->builder->CreatePHI(Type::getDoubleTy(context->llvmContext), 2, "iftmp");
+
+    PN->addIncoming(thenValue, thenBB);
+    PN->addIncoming(elseValue, elseBB);
+    return PN;
+}
+
 // -------------- Class definitions for class ForStmt ---------------- //
 ForStmt::ForStmt(char* id, class Expression *expr1, class Expression *expr2, class Block *block) {
     this->id = id;
     this->expr1 = expr1;
     this->expr2 = expr2;
     this->block = block;
+}
+
+Value* ForStmt::codeGen(Context *context) {
+    // Emit the start code first, without 'variable' in scope.
+    Value *startVal = expr1->codeGen(context);
+    if (startVal == nullptr) {
+        cerr << "[error] init expr returned null \n";
+        return nullptr;
+    }
+
+    if (expr1->getExprType() == ExprType::location) {
+        startVal = context->builder->CreateLoad(startVal);
+    }
+
+    // Make the new basic block for the loop header, inserting after current block.
+    Function *function = context->builder->GetInsertBlock()->getParent();
+    BasicBlock *preHeaderBB = context->builder->GetInsertBlock();
+    BasicBlock *loopBB = BasicBlock::Create(context->llvmContext, "loop", function);
+    BasicBlock *afterBB = BasicBlock::Create(context->llvmContext, "afterBlock", function);
+    
+    // Insert an explicit fall through from the current block to the LoopBB.
+    context->builder->CreateBr(loopBB);
+
+    // Start insertion in LoopBB.
+    context->builder->SetInsertPoint(loopBB);
+
+    // Start the PHI node with an entry for Start.
+    PHINode *Variable = context->builder->CreatePHI(Type::getInt32Ty(context->llvmContext), 2, id);
+    Variable->addIncoming(startVal, preHeaderBB);
+
+    // create memory for the loop variable
+    AllocaInst *alloca = context->createLocalVarFunction(function, id, "int");
+    context->builder->CreateStore(startVal, alloca);
+
+    // store the old value
+    Value *condValue = expr2->codeGen(context);
+    if (condValue == nullptr) {
+        cerr << "[error] condition value returned null \n";
+        return nullptr;
+    }
+    if (expr2->getExprType() == ExprType::location) {
+        condValue = context->builder->CreateLoad(condValue);
+    }
+
+    context->loops.push(new loopInfo(afterBB, loopBB, condValue, id, Variable));
+
+    // Within the loop, the variable is defined equal to the PHI node.  If it
+    // shadows an existing variable, we have to restore it, so save it now.
+    AllocaInst *oldValAlloca = context->NamedValues[id];
+    context->NamedValues[id] = alloca;
+
+    Value *loopBodyValue = block->codeGen(context);
+    if (loopBodyValue == nullptr) {
+        cerr << "[error] loop body value returned null \n";
+        return nullptr;
+    }
+
+    // get stepVal
+    Value *stepVal = ConstantInt::get(context->llvmContext, APInt(32, 1));
+    // load the currVal
+    Value *currVal = context->builder->CreateLoad(alloca, id);
+    // update the currVal and store it back
+    Value *newVal = context->builder->CreateAdd(currVal, stepVal, "nextVal");
+    context->builder->CreateStore(newVal, alloca);
+
+    // check the loop condition
+    condValue = context->builder->CreateICmpSLT(newVal, condValue, "loopCondition");
+
+    // create the basic block for loopEnd
+    BasicBlock *loopEndBlock = context->builder->GetInsertBlock();
+    context->builder->CreateCondBr(condValue, loopBB, afterBB);
+    context->builder->SetInsertPoint(afterBB);
+    Variable->addIncoming(newVal, loopEndBlock);
+
+    // store the oldVal back to te current scope
+    if (oldValAlloca) {
+        context->NamedValues[id] = oldValAlloca;
+    } else {
+        context->NamedValues.erase(id);
+    }
+
+    return ConstantInt::get(context->llvmContext, APInt(32, 1));
 }
 
 // -------------- Class definitions for class ForStmt ---------------- //
@@ -236,6 +384,37 @@ Value* ReturnStmt::codeGen(Context *context) {
     }
 
     return context->builder->CreateRetVoid();
+}
+
+// ------------- Class definitions for class BreakStmt --------------- //
+Value* BreakStmt::codeGen(Context *context) {
+    Value *value = ConstantInt::get(context->llvmContext, APInt(32, 1));
+    loopInfo *currLoop = context->loops.top();
+    context->builder->CreateBr(currLoop->getAfterBlock());
+    return value;
+}
+
+// ------------ Class definitions for class ContinueStmt ------------- //
+Value* ContinueStmt::codeGen(Context *context) {
+    Value *value = ConstantInt::get(context->llvmContext, llvm::APInt(32, 1));
+    loopInfo *currentLoop = context->loops.top();
+    
+    Expression *condition = nullptr;
+    string var = currentLoop->getLoopVariable();
+    char* charVar = new char[var.length()+1];
+    strcpy(charVar, var.c_str());
+    AllocaInst *Alloca = context->NamedValues[charVar];
+    delete(charVar);
+
+    Value *stepVal = ConstantInt::get(context->llvmContext, APInt(32, 1));
+    Value *cur = context->builder->CreateLoad(Alloca, var);
+    Value *next_val = context->builder->CreateAdd(cur, stepVal, "NextVal");
+    context->builder->CreateStore(next_val, Alloca);
+    llvm::Value *cond = context->builder->CreateICmpULE(next_val, currentLoop->getCondition(),
+                                                                   "loopcondition");
+    BasicBlock *loopEndBlock = context->builder->GetInsertBlock();
+    context->builder->CreateCondBr(cond, currentLoop->getCheckBlock(), currentLoop->getAfterBlock());
+    return value;
 }
 
 // -------- Class definitions for class EnclosedExpression ---------- //

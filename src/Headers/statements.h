@@ -143,6 +143,8 @@ private:
 public:
     IfElseStmt(class Expression *expr, class Block *ifBlock, class Block *elseBlock);
 
+    Value* codeGen(Context *context);
+
 };
 
 // ------------------------------------------------------------------------------
@@ -158,6 +160,8 @@ private:
 
 public:
     ForStmt(char* id, class Expression *expr1, class Expression *expr2, class Block *block);
+
+    Value* codeGen(Context *context);
 
 };
 
@@ -178,12 +182,16 @@ class BreakStmt: public Statement {
 public:
     BreakStmt() {}
 
+    Value *codeGen(Context *context);
+
 };
 
 // ------------------------------------------------------------------------------
 class ContinueStmt: public Statement {
 public:
     ContinueStmt() {}
+
+    Value* codeGen(Context *context);
 
 };
 

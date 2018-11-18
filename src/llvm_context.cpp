@@ -3,6 +3,7 @@
 Context::Context() {
     this->moduleOb = new Module("Decaf Compiler", llvmContext);
     this->builder = new IRBuilder<>(llvmContext);
+    this->loops = new stack<loopInfo*>();
 }
 
 AllocaInst* Context::createLocalVarFunction(Function *function, char* id, char* type) {

@@ -8,6 +8,31 @@
 using namespace llvm;
 using namespace std;
 
+class loopInfo {
+    BasicBlock *afterBB, *checkBB;
+    Value *condition;
+    string loopVariable;
+    PHINode *phiVariable;
+public:
+    loopInfo(BasicBlock *afterBlock, BasicBlock *checkBlock, Value *cond, std::string var, PHINode *phiVar) {
+        afterBB = afterBlock;
+        checkBB = checkBlock;
+        condition = cond;
+        loopVariable = var;
+        phiVariable = phiVar;
+    }
+
+    BasicBlock *getAfterBlock() { return afterBB; }
+
+    BasicBlock *getCheckBlock() { return checkBB; }
+
+    Value *getCondition() { return condition; }
+
+    PHINode *getPHINode() { return phiVariable; }
+
+    string getLoopVariable() { return loopVariable; }
+};
+
 class Context {
 public:
     Context();
@@ -35,4 +60,6 @@ public:
     // Method that allocates memory for variables of a function on the stack of the function by
     // creating an AllocaInst
     AllocaInst* createLocalVarFunction(Function *function, char* id, char* type);
+
+    stack<loopInfo*> loops;
 };
