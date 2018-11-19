@@ -46,6 +46,10 @@ public:
 
     void addMethodArg(class MethodArg *methodArg);
 
+    vector<class MethodArg*> getMethodArgs() {
+        return methodArgsVector;
+    }
+
 };
 
 class MethodArg: public ASTnode {
@@ -58,6 +62,14 @@ private:
 
 public:
     MethodArg(char* type, char* name);
+
+    char* getArgType() {
+        return type;
+    }
+
+    char* getArgName() {
+        return name;
+    }
 
 };
 

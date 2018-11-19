@@ -328,7 +328,7 @@ Value* ForStmt::codeGen(Context *context) {
         condValue = context->builder->CreateLoad(condValue);
     }
 
-    context->loops.push(new loopInfo(afterBB, loopBB, condValue, id, Variable));
+    context->loops->push(new loopInfo(afterBB, loopBB, condValue, id, Variable));
 
     // Within the loop, the variable is defined equal to the PHI node.  If it
     // shadows an existing variable, we have to restore it, so save it now.
@@ -389,7 +389,7 @@ Value* ReturnStmt::codeGen(Context *context) {
 // ------------- Class definitions for class BreakStmt --------------- //
 Value* BreakStmt::codeGen(Context *context) {
     Value *value = ConstantInt::get(context->llvmContext, APInt(32, 1));
-    loopInfo *currLoop = context->loops.top();
+    loopInfo *currLoop = context->loops->top();
     context->builder->CreateBr(currLoop->getAfterBlock());
     return value;
 }
@@ -397,7 +397,7 @@ Value* BreakStmt::codeGen(Context *context) {
 // ------------ Class definitions for class ContinueStmt ------------- //
 Value* ContinueStmt::codeGen(Context *context) {
     Value *value = ConstantInt::get(context->llvmContext, llvm::APInt(32, 1));
-    loopInfo *currentLoop = context->loops.top();
+    loopInfo *currentLoop = context->loops->top();
     
     Expression *condition = nullptr;
     string var = currentLoop->getLoopVariable();

@@ -274,6 +274,12 @@ int main(int argc, char **argv)
 	} while (!feof(yyin));
 
 	cerr << "Parsed Successfully!";
+	cerr << "\n-----------------------------------------------------------\n\n";
+
+	// code gen
+	if (start) {
+		start->codeGen();
+	}
 
 	return 0;
 }

@@ -19,6 +19,11 @@ Value* Program::codeGen() {
 
 
     // codeGen() for methodDeclarations
+    v = methodDeclarations->codeGen(context);
+    if (v == nullptr) {
+        cerr << "[error] method declarations returned null on code gen \n";
+        return nullptr;
+    }
 
     return v;
 }

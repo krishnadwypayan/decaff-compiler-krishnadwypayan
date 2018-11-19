@@ -10,7 +10,7 @@ using namespace std;
 
 class ASTnode {
 public:
-    // virtual Value* codeGen(Context *context) {}
+    virtual Value* codeGen(Context *context) {}
 
 };
 

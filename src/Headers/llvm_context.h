@@ -61,5 +61,5 @@ public:
     // creating an AllocaInst
     AllocaInst* createLocalVarFunction(Function *function, char* id, char* type);
 
-    stack<loopInfo*> loops;
+    std::stack<loopInfo*> *loops;
 };
