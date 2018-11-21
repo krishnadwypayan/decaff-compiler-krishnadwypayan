@@ -277,8 +277,8 @@ int main(int argc, char **argv)
 	cerr << "\n-----------------------------------------------------------\n\n";
 
 	// code gen
-	if (start) {
-		start->codeGen();
+	if (root) {
+		root->codeGen();
 	}
 
 	return 0;
