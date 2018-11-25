@@ -1,3 +1,6 @@
+#ifndef DECAF_LLVM_CONTEXT
+#define DECAF_LLVM_CONTEXT
+
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
@@ -63,3 +66,5 @@ public:
 
     std::stack<loopInfo*> *loops;
 };
+
+#endif // DECAF_LLVM_CONTEXT

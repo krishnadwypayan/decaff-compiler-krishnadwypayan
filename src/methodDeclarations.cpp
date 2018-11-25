@@ -30,11 +30,11 @@ MethodDeclaration::MethodDeclaration(char* type, char* methodName, class MethodA
 Value* MethodDeclaration::codeGen(Context *context) {
     vector<char*> argNames;
     vector<char*> argTypes;
-    vector<class MethodArg*> args = methodArgs->getMethodArgs();
+    vector<class MethodArg*> params = methodArgs->getMethodArgs();
     vector<Type*> arguments;
 
-    // iterate over args and get type in llvm
-    for (auto &arg : args) {
+    // iterate over params and get type in llvm
+    for (auto &arg : params) {
         char* argType = arg->getArgType();
         char* argName = arg->getArgName();
 
@@ -74,7 +74,7 @@ Value* MethodDeclaration::codeGen(Context *context) {
     Function *function = Function::Create(funcType, Function::ExternalLinkage, methodName, context->moduleOb);
 
     // iterate throught the arguments
-    auto argsSize = args.size();
+    auto argsSize = params.size();
     unsigned idx = 0;
     for (Function::arg_iterator argIt = function->arg_begin(); idx != argsSize; argIt++, idx++) {
         argIt->setName(argNames[idx]);
