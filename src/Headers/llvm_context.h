@@ -12,10 +12,18 @@ using namespace llvm;
 using namespace std;
 
 class loopInfo {
+    // BasicBlock that corresponds to the block that should follow the current block
     BasicBlock *afterBB, *checkBB;
+    
+    // Looping condition
     Value *condition;
+    
+    // The loop variable used in the looping condition
     string loopVariable;
+    
+    // PHINode
     PHINode *phiVariable;
+
 public:
     loopInfo(BasicBlock *afterBlock, BasicBlock *checkBlock, Value *cond, std::string var, PHINode *phiVar) {
         afterBB = afterBlock;
@@ -25,15 +33,27 @@ public:
         phiVariable = phiVar;
     }
 
-    BasicBlock *getAfterBlock() { return afterBB; }
+    // Basic getters for each of the loopInfo members
 
-    BasicBlock *getCheckBlock() { return checkBB; }
+    BasicBlock *getAfterBlock() { 
+        return afterBB; 
+    }
 
-    Value *getCondition() { return condition; }
+    BasicBlock *getCheckBlock() { 
+        return checkBB; 
+    }
 
-    PHINode *getPHINode() { return phiVariable; }
+    Value *getCondition() { 
+        return condition; 
+    }
 
-    string getLoopVariable() { return loopVariable; }
+    PHINode *getPHINode() { 
+        return phiVariable; 
+    }
+
+    string getLoopVariable() { 
+        return loopVariable; 
+    }
 };
 
 class Context {
@@ -64,6 +84,8 @@ public:
     // creating an AllocaInst
     AllocaInst* createLocalVarFunction(Function *function, char* id, char* type);
 
+    // Stack of loopInfo objects is used to store the basic blocks information involved in loops.
+    // The top of the stack stores the current loop block.
     std::stack<loopInfo*> *loops;
 };
 

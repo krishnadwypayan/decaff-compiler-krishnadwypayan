@@ -86,7 +86,7 @@ Value* MethodDeclaration::codeGen(Context *context) {
 
     // allocate memory for args
     idx = 0;
-    for (auto &arg : function->args()) {
+    for (auto &arg : function->getArgumentList()) {
         AllocaInst *alloca = context->createLocalVarFunction(function, argNames[idx], argTypes[idx]);
         context->builder->CreateStore(&arg, alloca);
         context->NamedValues[argNames[idx]] = alloca;
